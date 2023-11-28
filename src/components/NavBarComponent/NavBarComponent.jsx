@@ -6,14 +6,19 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import CartWidgetComponent from '../CartWidgetComponent/CartWidgetComponent';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faHouse} from "@fortawesome/free-solid-svg-icons";
+import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const NavBarComponent = () => {
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    axios.get('https://dummyjson.com/products/categories').then(res => setCategories(res.data)).catch((error) => console.log(error));
+  }, []);
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid>
-        <Navbar.Brand href="#"><img style={{width:'200px'}} src={JOTA}/></Navbar.Brand>
+        <Navbar.Brand href='#'> <Link to={"/"}> <img style={{ width: '200px' }} src={JOTA} /></Link> </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
@@ -21,28 +26,22 @@ const NavBarComponent = () => {
             style={{ maxHeight: '100px' }}
             navbarScroll
           >
-            <Nav.Link href="#action1"><FontAwesomeIcon style={{fontSize:'2rem',
-          marginRight:'1.5rem',
-          textDecorationColor:'#C8A2C8'}} icon={faHouse} /></Nav.Link>
-            <Nav.Link style={{fontSize:'1.5rem',
-          marginRight:'1.5rem'}} href="#action2"> Productos</Nav.Link>
-            <NavDropdown style={{fontSize:'1.5rem',
-          marginRight:'1.5rem'}} title="Categorias" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Bases</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
-                Iluminadores
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
-                Labiales
-              </NavDropdown.Item>
+            <NavDropdown style={{
+              fontSize: '1.5rem',
+              marginRight: '1.5rem'
+            }} title="Categorias" id="navbarScrollingDropdown">
+              {
+                categories.map((category, index) => {
+                  return (
+                    <NavDropdown.Item key={index} ><Link to={`/category/${category}`} style={{ textDecoration: 'none', color: 'black' }} >
+                      {category}
+                    </Link>
+                    </NavDropdown.Item>)
+                })
+              }
             </NavDropdown>
-            <Nav.Link style={{fontSize:'1.5rem',
-          marginRight:'1.5rem'}} href="#">
-              Contacto
-            </Nav.Link>
           </Nav>
-          <CartWidgetComponent/>
+          <CartWidgetComponent />
           <Form className="d-flex">
             <Form.Control
               type="search"
