@@ -1,22 +1,18 @@
-import React from 'react'
-import ItemListContainer from '../components/ItemListContainer/ItemListContainer'
+import React from "react";
+import { useAllProducts } from "../hooks/useProducts";
+import { ItemListContainer } from "../components/ItemListContainer/ItemListContainer";
 
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 
-const Home = () => {
-    const [products, setProdcuts] = useState([]);
 
-    useEffect(() => {
-      axios.get('https://dummyjson.com/products/?limit=12').then(res => {
-        setProdcuts(res.data.products);
-      })
-        .catch((error) => console.log(error));
-    }, []);
-    
+ const Home = () => {
+  const { products} = useAllProducts("products");
+
   return (
-    <ItemListContainer products={products} />
-  )
-}
+    <div>
 
-export default Home
+      <ItemListContainer products={products} />
+
+    </div>
+  );
+};
+export default Home;
